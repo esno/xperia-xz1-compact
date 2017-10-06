@@ -116,8 +116,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if [ -f /var/lib/aosp/build/envsetup.sh ]; then
-  cd /var/lib/aosp
+if [ -f /var/lib/aosp8/build/envsetup.sh ]; then
+  cd /var/lib/aosp8
   source build/envsetup.sh
   alias make="make -j$(grep -c ^processor /proc/cpuinfo)"
 fi

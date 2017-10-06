@@ -25,7 +25,7 @@
 
 - name: create aosp root directory
   file:
-    path: /var/lib/aosp
+    path: /var/lib/aosp8
     owner: user
     group: user
     mode: 0755
@@ -43,30 +43,30 @@
     - { src: home/user/.bashrc.j2, dest: /home/user/.bashrc }
 
 - name: initialize aosp tree
-  shell: echo y | repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.1_r55
+  shell: echo y | repo init -u https://android.googlesource.com/platform/manifest -b android-8.0.0_r15
   args:
-    chdir: /var/lib/aosp
-    creates: /var/lib/aosp/.repo
+    chdir: /var/lib/aosp8
+    creates: /var/lib/aosp8/.repo
   become: yes
   become_user: user
 
 - name: fetch manifests
   git:
     repo: https://github.com/sonyxperiadev/local_manifests.git
-    dest: /var/lib/aosp/.repo/local_manifests
-    version: n-mr1_4.4
+    dest: /var/lib/aosp8/.repo/local_manifests
+    version: master
   become: yes
   become_user: user
 
 - name: sync repo
   shell: repo sync
   args:
-    chdir: /var/lib/aosp
+    chdir: /var/lib/aosp8
   become: yes
   become_user: user
 
 - name: create aosp symlink
   file:
-    src: /var/lib/aosp
-    dest: /home/user/aosp
+    src: /var/lib/aosp8
+    dest: /home/user/aosp8
     state: link
