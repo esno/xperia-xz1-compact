@@ -33,11 +33,14 @@
 
 - name: generate gitconfig
   template:
-    src: home/user/.gitconfig.j2
-    dest: /home/user/.gitconfig
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
     owner: user
     group: user
     mode: 0640
+  with_items:
+    - { src: home/user/.gitconfig.j2, dest: /home/user/.gitconfig }
+    - { src: home/user/.bashrc.j2, dest: /home/user/.bashrc }
 
 - name: initialize aosp tree
   shell: echo y | repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.1_r55
@@ -55,7 +58,15 @@
   become: yes
   become_user: user
 
-- name: sync repo && ./repo_update.sh
+- name: sync repo
   shell: repo sync
   args:
     chdir: /var/lib/aosp
+  become: yes
+  become_user: user
+
+- name: create aosp symlink
+  file:
+    src: /var/lib/aosp
+    dest: /home/user/aosp
+    state: link
