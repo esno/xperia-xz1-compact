@@ -1,0 +1,16 @@
+---
+- name: add i386 architecture
+  shell: dpkg --add-architecture i386
+  args:
+    creates: /var/lib/dpkg/arch
+
+- name: update system
+  apt:
+    update_cache: yes
+    upgrade: full
+
+- name: create symlink
+  file:
+    src: /usr/local/development
+    dest: /home/user/development
+    state: link

@@ -1,0 +1,61 @@
+---
+- name: install aosp dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - openjdk-8-jdk
+    - bison
+    - g++-multilib
+    - git
+    - gperf
+    - libxml2-utils
+    - make
+    - zlib1g-dev:i386
+    - zip
+    - curl
+
+- name: install repo tool
+  get_url:
+    url: https://storage.googleapis.com/git-repo-downloads/repo
+    dest: /usr/bin/repo
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create aosp root directory
+  file:
+    path: /var/lib/aosp
+    owner: user
+    group: user
+    mode: 0755
+    state: directory
+
+- name: generate gitconfig
+  template:
+    src: home/user/.gitconfig.j2
+    dest: /home/user/.gitconfig
+    owner: user
+    group: user
+    mode: 0640
+
+- name: initialize aosp tree
+  shell: echo y | repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.1_r55
+  args:
+    chdir: /var/lib/aosp
+    creates: /var/lib/aosp/.repo
+  become: yes
+  become_user: user
+
+- name: fetch manifests
+  git:
+    repo: https://github.com/sonyxperiadev/local_manifests.git
+    dest: /var/lib/aosp/.repo/local_manifests
+    version: n-mr1_4.4
+  become: yes
+  become_user: user
+
+- name: sync repo && ./repo_update.sh
+  shell: repo sync
+  args:
+    chdir: /var/lib/aosp
