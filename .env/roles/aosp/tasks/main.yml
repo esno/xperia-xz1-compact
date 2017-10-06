@@ -58,13 +58,6 @@
   become: yes
   become_user: user
 
-- name: sync repo
-  shell: repo sync
-  args:
-    chdir: /var/lib/aosp8
-  become: yes
-  become_user: user
-
 - name: create aosp symlink
   file:
     src: /var/lib/aosp8

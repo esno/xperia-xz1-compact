@@ -18,6 +18,12 @@ It requires `lxc` to setup a clean development environment.
 
     $ lxc-attach -n <container> -- /bin/su -l user
 
+## prepare sources
+
+    $ cd /var/lib/aosp8
+    $ repo sync
+    $ ./repo-update.sh
+
 # handling
 
 ## build
