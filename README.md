@@ -7,6 +7,14 @@ The Xperia XZ1 compact is based on the `yoshino` platform and also known as `lil
 
 # development environment
 
+## system requirements
+
+| component | minimum     |
+| --------- | ----------- |
+| OS        | 64bit/linux |
+| HDD       | 250GB       |
+| RAM/Swap  | 16GB        |
+
 ## setup the toolchain
 
     $ git clone https://github.com/esno/xperia-xz1-compact.git
