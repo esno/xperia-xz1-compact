@@ -117,7 +117,13 @@ if ! shopt -oq posix; then
 fi
 
 if [ -f /var/lib/aosp8/build/envsetup.sh ]; then
+  alias make="make -j$(grep -c ^processor /proc/cpuinfo)"
+  export USE_CCACHE=1
+
+  # prevent jack running out of memory
+  export ANDROID_JACK_VM_ARGS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4G"
+
   cd /var/lib/aosp8
   source build/envsetup.sh
-  alias make="make -j$(grep -c ^processor /proc/cpuinfo)"
+  prebuilts/misc/linux-x86/ccache/ccache -M 50G
 fi
