@@ -14,6 +14,8 @@
     - zlib1g-dev:i386
     - zip
     - curl
+    - bc
+    - libssl-dev
 
 - name: install repo tool
   get_url:
