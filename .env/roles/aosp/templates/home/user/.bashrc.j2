@@ -117,6 +117,7 @@ if ! shopt -oq posix; then
 fi
 
 if [ -f /var/lib/aosp8/build/envsetup.sh ]; then
+  alias customize="cd /usr/local/development/xperia-xz1-compact/.env && ansible-playbook -i inventory/hosts.ini customize.yml && cd --"
   alias make="make -j$(grep -c ^processor /proc/cpuinfo)"
   export USE_CCACHE=1
 

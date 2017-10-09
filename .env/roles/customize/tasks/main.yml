@@ -1,0 +1,21 @@
+---
+- name: fetch additional apps
+  git:
+    repo: '{{ item.repo }}'
+    dest: '{{ item.dest }}'
+    version: cm-14.1
+  with_items:
+    - { repo: 'https://github.com/LineageOS/android_packages_apps_Browser.git', dest: /var/lib/aosp8/packages/apps/Browser }
+    - { repo: 'https://github.com/LineageOS/android_packages_apps_CMFileManager.git', dest: /var/lib/aosp8/packages/apps/CMFileManager }
+    - { repo: 'https://github.com/LineageOS/android_external_libtruezip.git', dest: /var/lib/aosp8/external/libtruezip }
+    - { repo: 'https://github.com/LineageOS/android_external_cyanogen_UICommon.git', dest: /var/lib/aosp8/external/uicommon }
+
+- name: replace product package list
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: user
+    group: user
+    mode: 0640
+  with_items:
+    - { src: var/lib/aosp8/build/target/product/core.mk.j2, dest: /var/lib/aosp8/build/target/product/core.mk }

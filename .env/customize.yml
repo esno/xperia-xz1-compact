@@ -1,0 +1,6 @@
+---
+- name: assign roles
+  hosts: local
+  connection: local
+  roles:
+    - customize
