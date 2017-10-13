@@ -53,6 +53,10 @@ it vibrates three times.
     $ rm -r device/sony/common-kernel
     $ make bootimage
 
+#### boot kernel temporarily
+
+    $ fastboot boot <kernel> [<ramdisk> [<seconds>]]
+
 ## flash
 
 Turn off your device, hold down the **volume up** and connect the device to your computer.
@@ -62,6 +66,19 @@ The notification light should shine **blue** to confirm it's in fastboot mode.
     $ fastboot -s 256M flash system out/target/product/<device>/system.img
     $ fastboot -s 256M flash userdata out/target/product/<device>/userdata.img
 
+## oem (factory reset)
+
+download [zip archive][aosp8oem] from sony servers.
+
+    $ fastboot flash oem SW_binaries_for_Xperia_AOSP_<version>_yoshino.img
+
+
+## cleanup
+
+    $ fastboot erase cache
+
 ## reboot
 
     $ fastboot reboot
+
+[aosp8oem]: https://developer.sonymobile.com/downloads/software-binaries/software-binaries-for-aosp-oreo-android-8-kernel-4-4-yoshino/
