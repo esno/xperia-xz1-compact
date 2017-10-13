@@ -62,9 +62,9 @@ it vibrates three times.
 Turn off your device, hold down the **volume up** and connect the device to your computer.
 The notification light should shine **blue** to confirm it's in fastboot mode.
 
-    $ fastboot -s 256M flash boot out/target/product/<device>/boot.img
-    $ fastboot -s 256M flash system out/target/product/<device>/system.img
-    $ fastboot -s 256M flash userdata out/target/product/<device>/userdata.img
+    $ fastboot -S 256M flash boot out/target/product/<device>/boot.img
+    $ fastboot -S 256M flash system out/target/product/<device>/system.img
+    $ fastboot -S 256M flash userdata out/target/product/<device>/userdata.img
 
 ## oem (factory reset)
 
