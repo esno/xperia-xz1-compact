@@ -28,11 +28,22 @@ The Xperia XZ1 compact is based on the `yoshino` platform and also known as `lil
 
     $ lxc-attach -n <container> -- /bin/su -l user
 
-## prepare sources
+### prepare sources
 
     $ cd /var/lib/aosp8
     $ repo sync
     $ ./repo-update.sh
+
+### customize the builds
+
+apps like fdroid requires additional sdk packages which are published under special terms and conditions.
+To allow gradle to download these packages you have to accept them.
+
+    $ allow_licenses
+
+To customize the build invoke the alias
+
+    $ customize
 
 # handling
 

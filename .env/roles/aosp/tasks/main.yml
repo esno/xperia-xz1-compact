@@ -17,6 +17,46 @@
     - bc
     - libssl-dev
 
+- name: create directories
+  file:
+    dest: '{{ item.dest }}'
+    state: directory
+    owner: '{{ item.owner }}'
+    group: '{{ item.group }}'
+    mode: 0755
+  with_items:
+    - { dest: /opt/gradle, owner: root, group: root }
+    - { dest: /opt/android, owner: user, group: user }
+
+- name: download zipfiles
+  get_url:
+    url: '{{ item.url }}'
+    dest: '{{ item.dest }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { url: 'https://services.gradle.org/distributions/gradle-2.14.1-bin.zip', dest: /opt/gradle.zip }
+    - { url: 'https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip', dest: /opt/sdk-tools.zip }
+
+- name: extract zipfiles
+  unarchive:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    copy: no
+    owner: '{{ item.owner }}'
+    group: root
+    creates: '{{ item.creates }}'
+  with_items:
+    - { src: /opt/gradle.zip, dest: /opt/gradle, creates: /opt/gradle/gradle-2.14.1, owner: root }
+    - { src: /opt/sdk-tools.zip, dest: /opt/android, creates: /opt/android/tools, owner: user }
+
+- name: create gradle symlink
+  file:
+    src: /opt/gradle/gradle-2.14.1/bin/gradle
+    dest: /usr/local/bin/gradle
+    state: link
+
 - name: install repo tool
   get_url:
     url: https://storage.googleapis.com/git-repo-downloads/repo
