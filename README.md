@@ -36,7 +36,7 @@ The Xperia XZ1 compact is based on the `yoshino` platform and also known as `lil
 
 ### customize the builds
 
-apps like fdroid requires additional sdk packages which are published under special terms and conditions.
+apps like [fdroid package manager][fdroid] requires additional sdk packages which are published under special terms and conditions.
 To allow gradle to download these packages you have to accept them.
 
     $ allow_licenses
@@ -93,3 +93,4 @@ download [zip archive][aosp8oem] from sony servers.
     $ fastboot reboot
 
 [aosp8oem]: https://developer.sonymobile.com/downloads/software-binaries/software-binaries-for-aosp-oreo-android-8-kernel-4-4-yoshino/
+[fdroid]: https://f-droid.org

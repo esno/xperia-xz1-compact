@@ -105,3 +105,15 @@
     src: /var/lib/aosp8
     dest: /home/user/aosp8
     state: link
+
+- name: sync repos
+  shell: repo sync && ./repo_update.sh
+  args:
+    chdir: /var/lib/aosp8
+  register: taskResult
+  until: taskResult == 0
+  retries: 3
+  delay: 1
+  ignore_errors: yes
+  become: yes
+  become_user: user
