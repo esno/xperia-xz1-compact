@@ -85,7 +85,7 @@
     - { src: home/user/.bashrc.j2, dest: /home/user/.bashrc }
 
 - name: initialize aosp tree
-  shell: echo y | repo init -u https://android.googlesource.com/platform/manifest -b android-8.0.0_r15
+  shell: echo y | repo init -u https://android.googlesource.com/platform/manifest -b android-8.1.0_r15
   args:
     chdir: /var/lib/aosp8
     creates: /var/lib/aosp8/.repo
@@ -96,7 +96,7 @@
   git:
     repo: https://github.com/sonyxperiadev/local_manifests.git
     dest: /var/lib/aosp8/.repo/local_manifests
-    version: master
+    version: android-8.1.0_r15
   become: yes
   become_user: user
 
@@ -107,7 +107,7 @@
     state: link
 
 - name: sync repos
-  shell: repo sync && ./repo_update.sh
+  shell: repo sync -j8 && ./repo_update.sh
   args:
     chdir: /var/lib/aosp8
   register: taskResult
