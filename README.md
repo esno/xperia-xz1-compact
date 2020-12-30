@@ -1,8 +1,6 @@
 ![android](https://c1.staticflickr.com/7/6021/5979551591_e61f575354_m_d.jpg "android")
 
 Build instructions to compile AOSP for Sony Xperia XZ1 Compact device.
-It requires `lxc` to setup a clean development environment.
-
 The Xperia XZ1 compact is based on the `yoshino` platform and also known as `lilac`.
 
 # development environment
@@ -17,72 +15,64 @@ The Xperia XZ1 compact is based on the `yoshino` platform and also known as `lil
 
 ## setup the toolchain
 
-    $ git clone https://github.com/esno/xperia-xz1-compact.git
-    $ bash ./env.sh <container>
+    lxc-create -n aosp -t download -- -d ubuntu -r bionic -a amd64
+    lxc-start -n aosp
+    lxc-attach -n aosp --clear-env -- /bin/su -l root
 
-## update the toolchain
+## install dependencies
 
-    $ bash ./env.sh <container>
+    dpkg --add-architecture i386
+    apt-get update
+    apt-get install openjdk-11-jdk bison g++-multilib git gperf libxml2-utils make zlib1g-dev:i386 zip liblz4-tool libncurses5 libssl-dev bc flex curl python gnupg2 rsync git build-essential repo
 
-## enter development environment
+## prepare aosp tree
 
-    $ lxc-attach -n <container> -- /bin/su -l user
+    git config --global user.name "aosp"
+    git config --global user.email "aosp@localhost"
 
-### prepare sources
+    mkdir aosp; cd aosp
+    repo init repo init -u https://android.googlesource.com/platform/manifest -b android-11.0.0_r18
+    cd .repo
+    git clone -b android-11.0.0_r18 https://github.com/sonyxperiadev/local_manifests
+    repo sync -d -q -c -j8
 
-    $ cd /var/lib/aosp8
-    $ repo sync
-    $ ./repo-update.sh
+    ./repo_update.sh
 
 ### customize the builds
 
-apps like [fdroid package manager][fdroid] requires additional sdk packages which are published under special terms and conditions.
-To allow gradle to download these packages you have to accept them.
-
-    $ allow_licenses
-
-To customize the build invoke the alias
-
-    $ customize
+    git clone https://github.com/esno/xperia-xz1-compact.git vendor/xperia-xz1-compact
+    source build/envsetup.sh
+    ./vendor/xperia-xz1/compact/repo_update.sh
 
 # handling
 
 ## build
 
-The right combo for `lilac` is `aosp_g8441-userdebug`
+The right combos for `lilac` are `aosp_g8441-userdebug` and `aosp_g8441-eng`
 
     $ lunch aosp_g8441-userdebug
-    $ make # number of cpu's are autodetected in alias
-
-### kernel
-
-The Xperia XZ1 compact does **not** boot with the precompiled kernel.
-When your device stuck in boot splash (white screen with sony brand) press **volume up** and **power**.
-The device vibrates once to notify a reboot. If you want to shutdown the device keep this buttons pressed until
-it vibrates three times.
-
-    $ rm -r device/sony/common-kernel
-    $ make bootimage
+    $ make -j$(nproc)
 
 #### boot kernel temporarily
 
     $ fastboot boot <kernel> [<ramdisk> [<seconds>]]
+
+## oem (factory reset)
+
+download [zip archive][aospoem] from sony servers.
+
+    $ fastboot flash oem SW_binaries_for_Xperia_AOSP_<version>_yoshino.img
 
 ## flash
 
 Turn off your device, hold down the **volume up** and connect the device to your computer.
 The notification light should shine **blue** to confirm it's in fastboot mode.
 
-    $ fastboot -S 256M flash boot out/target/product/<device>/boot.img
-    $ fastboot -S 256M flash system out/target/product/<device>/system.img
-    $ fastboot -S 256M flash userdata out/target/product/<device>/userdata.img
-
-## oem (factory reset)
-
-download [zip archive][aosp8oem] from sony servers.
-
-    $ fastboot flash oem SW_binaries_for_Xperia_AOSP_<version>_yoshino.img
-
+    fastboot flash boot out/target/product/lilac/boot.img
+    fastboot flash recovery out/target/product/lilac/recovery.img
+    fastboot flash system out/target/product/lilac/system.img
+    fastboot flash vendor out/target/product/lilac/vendor.img
+    fastboot flash userdata out/target/product/lilac/userdata.img
 
 ## cleanup
 
@@ -92,5 +82,4 @@ download [zip archive][aosp8oem] from sony servers.
 
     $ fastboot reboot
 
-[aosp8oem]: https://developer.sonymobile.com/downloads/software-binaries/software-binaries-for-aosp-oreo-android-8-kernel-4-4-yoshino/
-[fdroid]: https://f-droid.org
+[aospoem]: https://developer.sony.com/develop/open-devices/downloads/software-binaries
