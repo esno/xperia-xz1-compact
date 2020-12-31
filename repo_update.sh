@@ -10,6 +10,13 @@ update_aosp9() {
   cd ..
 }
 
+update_aosp10() {
+  # remove default apps
+  cd ./build
+  patch -N -p 1 < ../vendor/xperia-xz1-compact/aosp10/patches/remove-apps.patch
+  cd ..
+}
+
 update_aosp11() {
   # replace old precompiled lilac kernel
   cp ${ANDROID_BUILD_TOP}/vendor/xperia-xz1-compact/kernel/v4.14.208/kernel-dtb-lilac \
@@ -24,6 +31,9 @@ update_aosp11() {
 case "${PLATFORM_VERSION}" in
   9)
     update_aosp9
+    ;;
+  10)
+    update_aosp10
     ;;
   11)
     update_aosp11
