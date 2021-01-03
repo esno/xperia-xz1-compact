@@ -7,11 +7,11 @@ The Xperia XZ1 compact is based on the `yoshino` platform and also known as `lil
 
 ## system requirements
 
-| component | minimum     |
-| --------- | ----------- |
-| OS        | 64bit/linux |
-| HDD       | 250GB       |
-| RAM/Swap  | 16GB        |
+    | component | minimum     |
+    | --------- | ----------- |
+    | OS        | 64bit/linux |
+    | HDD       | 250GB       |
+    | RAM/Swap  | 16GB        |
 
 ## setup the toolchain
 
@@ -123,13 +123,13 @@ The right combos for `lilac` are `aosp_g8441-userdebug` and `aosp_g8441-eng`
 
     $ fastboot boot <kernel> [<ramdisk> [<seconds>]]
 
-## oem (factory reset)
+## flash OEM binaries
 
 download [zip archive][aospoem] from sony servers.
 
     $ fastboot flash oem SW_binaries_for_Xperia_AOSP_<version>_yoshino.img
 
-## flash
+## flash aosp
 
 Turn off your device, hold down the **volume up** and connect the device to your computer.
 The notification light should shine **blue** to confirm it's in fastboot mode.
